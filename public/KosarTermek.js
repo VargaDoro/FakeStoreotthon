@@ -1,47 +1,43 @@
-export default class KosarTermek{
-    #adat={}
+export default class KosarTermek {
+    #adat;
     #szElem;
-    constructor(termek, szElem){
+
+    constructor(termek, szElem) {
         this.#adat = termek;
         this.#szElem = szElem;
         this.#megjelenit();
-        this.#torolASzerverrol();
     }
 
-    #megjelenit(){
-        let html = `<tr>
-                        <td scope="col">${this.#adat.id}</td>
-                        <td scope="col">${this.#adat.title}</td>
-                        <td scope="col">${this.#adat.price}</td>
-                        <td scope="col">
-                            <button class="btn torol" data-id="${this.#adat.id}">❌</button>
-                        </td>
-                    </tr>`;
-        this.#szElem.insertAdjacentHTML("beforeend", html);
+    #megjelenit() {
+        const { id, title, price, description, image } = this.#adat;
+        this.#szElem.insertAdjacentHTML("beforeend", `
+            <tr>
+                <td scope="col">${id}</td>
+                <td scope="col">${title}</td>
+                <td scope="col">${price}</td>
+                <td scope="col">${description}</td>
+                <td scope="col"><img src="${image}" alt="${title}" style="max-width: 100px; height: auto;"></td>
+                <td scope="col"><button class="btn torol" data-id="${id}">❌</button></td>
+            </tr>`);
 
-        const utolsoGomb = this.#szElem.querySelector(`.torol[data-id="${this.#adat.id}"]`);
-        if (utolsoGomb) {
-            utolsoGomb.addEventListener("click", () => this.#torolASzerverrol());
-        }
+        this.#szElem.querySelector(`.torol[data-id="${id}"]`)
+            ?.addEventListener("click", () => this.#torolASzerverrol());
     }
 
     #torolASzerverrol() {
-        const cart = {
-            userId: 1,
-            products: [{ id: this.#adat.id }]
-        };
-    
         fetch('https://fakestoreapi.com/carts/1', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(cart)
+            body: JSON.stringify({ userId: 1, products: [{ id: this.#adat.id }] })
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Kosár frissítve:", data);
-            this.#szElem.querySelector(`.torol[data-id="${this.#adat.id}"]`).closest("tr").remove();
+        .then(res => res.json())
+        .then(() => {
+            this.#szElem.querySelector(`.torol[data-id="${this.#adat.id}"]`)
+                ?.closest("tr")?.remove();
         })
-        .catch(error => console.error("Hiba történt:", error));
+        .catch(err => {
+            console.error("Hiba történt:", err);
+            alert("Hiba történt a termék törlésekor! Próbáld újra.");
+        });
     }
-    
 }

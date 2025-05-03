@@ -6,26 +6,34 @@ export default class Kosar {
 
     constructor(szElem, lista) {
         this.#szElem = szElem;
-        this.#termeklista = lista;
+        this.#termeklista = lista || [];
         this.#megjelenit();
     }
 
     #megjelenit() {
-        let html = `<table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">id</th>
-                                <th scope="col">Termék név</th>
-                                <th scope="col">Ár</th>
-                                <th scope="col">Művelet</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>`;
-        this.#szElem.insertAdjacentHTML("beforeend", html);
+        this.#szElem.innerHTML = `
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">id</th>
+                        <th scope="col">Termék név</th>
+                        <th scope="col">Ár</th>
+                        <th scope="col">Leírás</th>
+                        <th scope="col">Kép</th>
+                        <th scope="col">Művelet</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>`;
+
         const tbodyELem = this.#szElem.querySelector("table tbody");
         this.#termeklista.forEach(termek => {
             new KosarTermek(termek, tbodyELem);
         });
     }
+
+    hozzaad(termek) {
+        this.#termeklista.push(termek);
+        this.#megjelenit(); // újrarajzolja
+    }    
 }

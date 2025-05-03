@@ -1,9 +1,11 @@
 export default class WebaruhazTermek{
     #adat={}
     #szElem;
-    constructor(termek, szElem){
+    #kosarCallback;
+    constructor(termek, szElem, kosarbaHelyezesFuggveny){
         this.#adat = termek;
         this.#szElem = szElem;
+        this.#kosarCallback = kosarbaHelyezesFuggveny;
         this.#megjelenit();
     }
 
@@ -16,7 +18,7 @@ export default class WebaruhazTermek{
                         <td scope="col">${this.#adat.description}</td>
                         <td scope="col"><img src="${this.#adat.image}" alt="${this.#adat.title}" style="max-width: 100px; height: auto;"></td>
                         <td scope="col">
-                        <button class = "btn kosarba">🛒</button>
+                        <button class="btn kosarba" data-id="${this.#adat.id}">🛒</button>
                         </td>
                         <td scope="col">
                         <button class = "btn kedvenc">❤️</button>
@@ -24,5 +26,10 @@ export default class WebaruhazTermek{
                     </tr>`
         this.#szElem.insertAdjacentHTML("beforeend", html)
         console.log(this.#szElem)
+
+        let gomb = this.#szElem.querySelector(`.kosarba[data-id="${this.#adat.id}"]`);
+        gomb.addEventListener("click", () => {
+            this.#kosarCallback(this.#adat); // ➜ hozzáadja a kosárhoz
+        });
     }
 }

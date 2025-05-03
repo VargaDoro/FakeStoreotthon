@@ -1,13 +1,18 @@
 import WebaruhazTermek from "./WebaruhazTermek.js";
+import Kosar from "./Kosar.js";
 
-export default class Webaruhaz{
-    #termeklista=[];
+export default class Webaruhaz {
+    #termeklista = [];
     #szElem;
-    constructor(szElem, lista){
+    #kosar;
+
+    constructor(szElem, lista, kosarElem) {
         this.#szElem = szElem;
         this.#termeklista = lista;
+        this.#kosar = new Kosar(kosarElem, []);
         this.#megjelenit();
     }
+
 
     #megjelenit(){
         let html = `<table class="table">
@@ -27,10 +32,9 @@ export default class Webaruhaz{
                     </table>`
 
         this.#szElem.insertAdjacentHTML("beforeend", html)
-        this.tbodyELem = this.#szElem.querySelector("table tbody")
-        console.log(this.tbodyELem)
+        this.tbodyELem = this.#szElem.querySelector("table tbody");
         this.#termeklista.forEach(termek => {
-            new WebaruhazTermek(termek, this.tbodyELem);
+            new WebaruhazTermek(termek, this.tbodyELem, (termekAdat) => this.#kosar.hozzaad(termekAdat));
         });
     }
 }

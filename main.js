@@ -7,6 +7,7 @@ import Kosar from "./public/Kosar.js";
 import Modell from "./Modell.js";
 
 const SZULOELEM = document.getElementsByClassName("tarolo")[0];
+const KOSARELEM = document.querySelector("#kosar");
 
 const ADMINTERMEKGOMB = document.querySelector(".admintermekek");
 const ADMINUSERGOMG = document.querySelector(".adminuser");
@@ -28,12 +29,12 @@ PUBLICTERMEKGOMB.addEventListener("click", function(){
     SZULOELEM.innerHTML = "";
     MODELL.getAdat('https://fakestoreapi.com/products', webaruhazMegjelenit);
 });
-PUBLICKOSARGOMB.addEventListener("click", function(){
+PUBLICKOSARGOMB.addEventListener("click", function() {
     SZULOELEM.innerHTML = "";
-    MODELL.getAdat('https://fakestoreapi.com/carts', kosarMegjelenit);
+    SZULOELEM.appendChild(KOSARELEM); // jelenítse meg a már meglévő kosarat
 });
-console.log(ADMINTERMEKGOMB, ADMINUSERGOMG, PUBLICTERMEKGOMB, PUBLICKOSARGOMB);
 
+MODELL.getAdat('https://fakestoreapi.com/products', webaruhazMegjelenit);
 /*console.log("A lista értéke a fetch ELŐTT: ")
 console.log(TERMEK)*/
 
@@ -49,7 +50,7 @@ function adminUserMegjelenit(lista){
 }
 
 function webaruhazMegjelenit(lista){
-    new Webaruhaz(SZULOELEM, lista)
+    new Webaruhaz(SZULOELEM, lista, KOSARELEM);
 }
 
 function kosarMegjelenit(lista){
