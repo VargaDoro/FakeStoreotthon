@@ -1,8 +1,6 @@
-//teljes táblázat, itt kapjuk meg az obj. listát
-//annyiszor példányosítjuk az AdminTermek osztályt, ahány eleme lesz a listának
-import AdminTermek from "./AdminTermek.js";
+import WebaruhazTermek from "./WebaruhazTermek.js";
 
-export default class AdminTermekTablazat{
+export default class Webaruhaz{
     #termeklista=[];
     #szElem;
     constructor(szElem, lista){
@@ -31,9 +29,8 @@ export default class AdminTermekTablazat{
         this.#szElem.insertAdjacentHTML("beforeend", html)
         this.tbodyELem = this.#szElem.querySelector("table tbody")
         console.log(this.tbodyELem)
-        /* ide példányosítjuk bele a táblázat sorait - AdmitTermek osztályt */
         this.#termeklista.forEach(termek => {
-            new AdminTermek(termek, this.tbodyELem);
+            new WebaruhazTermek(termek, this.tbodyELem);
         });
     }
 }
